@@ -1,16 +1,19 @@
 from sqlalchemy.orm import Session
 
 from app.models.kingdom import Kingdom
+from app.models.map import GameMap
 from app.schemas.kingdom import KingdomCreate, KingdomUpdate
 
 
-def create_kingdom(
-    db: Session,
-    kingdom_data: KingdomCreate,
-) -> Kingdom:
-    kingdom = Kingdom(
-        name=kingdom_data.name,
+def create_kingdom(db: Session, kingdom_data: KingdomCreate) -> Kingdom:
+    kingdom = Kingdom(name=kingdom_data.name)
+
+    game_map = GameMap(
+        width=20,
+        height=20,
     )
+
+    kingdom.game_map = game_map
 
     db.add(kingdom)
     db.commit()

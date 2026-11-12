@@ -9,6 +9,7 @@ from app.database import Base
 
 if TYPE_CHECKING:
     from app.models.citizen import Citizen
+    from app.models.map import GameMap
 
 
 class Kingdom(Base):
@@ -31,3 +32,9 @@ class Kingdom(Base):
         back_populates="kingdom",
         cascade="all, delete-orphan",
     )
+
+    game_map: Mapped["GameMap"] = relationship(
+    back_populates="kingdom",
+    cascade="all, delete-orphan",
+    uselist=False,
+)

@@ -3,9 +3,11 @@ from fastapi import FastAPI
 
 from app.api.citizens import router as citizens_router
 from app.api.kingdoms import router as kingdoms_router
+from app.api.maps import router as maps_router
 from app.database import Base, engine
 from app.models.citizen import Citizen
 from app.models.kingdom import Kingdom
+from app.models.map import GameMap
 
 # ایجاد جدول‌های دیتابیس
 Base.metadata.create_all(bind=engine)
@@ -18,6 +20,7 @@ app = FastAPI(
 
 app.include_router(kingdoms_router)
 app.include_router(citizens_router)
+app.include_router(maps_router)
 
 
 @app.get("/")

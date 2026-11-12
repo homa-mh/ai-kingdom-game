@@ -1,11 +1,20 @@
 
 from fastapi import FastAPI
 
+from app.api.kingdoms import router as kingdoms_router
+from app.database import Base, engine
+from app.models.kingdom import Kingdom
+
+# ایجاد جدول‌های دیتابیس
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI(
     title="AI Kingdom API",
     description="Backend API for the AI Kingdom game",
     version="0.1.0",
 )
+
+app.include_router(kingdoms_router)
 
 
 @app.get("/")

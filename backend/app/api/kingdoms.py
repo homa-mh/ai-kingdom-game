@@ -3,8 +3,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.schemas.kingdom import KingdomCreate, KingdomResponse
-from app.services.kingdom_service import create_kingdom, get_all_kingdoms, get_kingdom
+from app.schemas.kingdom import KingdomCreate, KingdomResponse, KingdomUpdate
+from app.services.kingdom_service import (
+    create_kingdom,
+    get_all_kingdoms,
+    get_kingdom,
+    update_kingdom,
+)
 
 router = APIRouter(
     prefix="/kingdoms",
@@ -37,6 +42,20 @@ def read_kingdom(
             status_code=404,
             detail="Kingdom not found",
         )
+
+    return kingdom
+
+
+@router.patch("/{kingdom_id}", response_model=KingdomResponse)
+def update_existing_kingdom(
+    kingdom_id: int,
+    kingdom_data: KingdomUpdate,
+    db: Session = Depends(get_db),
+):
+    kingdom = update_kingdom(db, kingdom_id, kingdom_data)
+
+    if kingdom is None:
+        raise HTTPException(status_code=404, detail="Kingdom not found")
 
     return kingdom
 

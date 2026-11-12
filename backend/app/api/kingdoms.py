@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas.kingdom import KingdomCreate, KingdomResponse
-from app.services.kingdom_service import create_kingdom, get_kingdom
+from app.services.kingdom_service import create_kingdom, get_all_kingdoms, get_kingdom
 
 router = APIRouter(
     prefix="/kingdoms",
@@ -19,6 +19,11 @@ def create_new_kingdom(
 ):
     return create_kingdom(db, kingdom_data)
 
+@router.get("/", response_model=list[KingdomResponse])
+def read_all_kingdoms(
+    db: Session = Depends(get_db),
+):
+    return get_all_kingdoms(db)
 
 @router.get("/{kingdom_id}", response_model=KingdomResponse)
 def read_kingdom(
@@ -34,3 +39,4 @@ def read_kingdom(
         )
 
     return kingdom
+

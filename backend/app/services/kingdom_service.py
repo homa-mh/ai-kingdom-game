@@ -1,4 +1,3 @@
-
 from sqlalchemy.orm import Session
 
 from app.models.kingdom import Kingdom
@@ -25,3 +24,6 @@ def get_kingdom(
     kingdom_id: int,
 ) -> Kingdom | None:
     return db.get(Kingdom, kingdom_id)
+
+def get_all_kingdoms(db: Session) -> list[Kingdom]:
+    return db.query(Kingdom).order_by(Kingdom.id).all()

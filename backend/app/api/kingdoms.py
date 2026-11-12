@@ -10,6 +10,7 @@ from app.services.kingdom_service import (
     get_kingdom,
     update_kingdom,
 )
+from app.services.simulation_service import advance_day
 
 router = APIRouter(
     prefix="/kingdoms",
@@ -59,3 +60,14 @@ def update_existing_kingdom(
 
     return kingdom
 
+@router.post("/{kingdom_id}/end-day", response_model=KingdomResponse)
+def end_kingdom_day(
+    kingdom_id: int,
+    db: Session = Depends(get_db),
+):
+    kingdom = advance_day(db, kingdom_id)
+
+    if kingdom is None:
+        raise HTTPException(status_code=404, detail="Kingdom not found")
+
+    return kingdom
